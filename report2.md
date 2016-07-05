@@ -10,14 +10,14 @@ Processador: Intel® Core™ i7-3610QM CPU @ 2.30GHz × 8
 
 Memória: 7,7 GiB
 
-O código foi compilado com `tau_cc.sh ­openmp ­O ­DSTREAM_ARRAY_SIZE=2988441 stream.c ­o stream`.
+O código foi compilado com `tau_cc.sh openmp -O -DSTREAM_ARRAY_SIZE=2988441 stream.c -o stream`.
 
 ## Gráfico:
 
 Os gráficos a seguir foram gerados utilizando a aplicação *paraprof*:
 
-![Gráfico de barras do tempo consumido por linha de código para cada thread.](images/stream3.png)
-![Gráfico de barras do tempo consumido por linha de código para cada thread.](images/stream4.png)
+![Gráfico de barras do tempo consumido por linha de código para cada thread.](images/stream-3.jpg)
+![Gráfico de barras do tempo consumido por linha de código para cada thread.](images/stream-4.jpg)
 
 ## Análise
 
