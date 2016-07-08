@@ -68,4 +68,5 @@ int main(int argc, char ** argv) {
   float seconds = (float)(end - start) / CLOCKS_PER_SEC;
 
   printf("Sorted in %f seconds.\n", seconds);
+  free(numbers);
 }
