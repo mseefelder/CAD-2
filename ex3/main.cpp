@@ -21,6 +21,7 @@ int main(int argc, char const *argv[])
 	struct timeval start, end;
 	gettimeofday(&start, NULL);
 
+	double PI = 3.14159265359;
 	double M, N;
 	#pragma omp parallel reduction(+:M,N)
 	{
@@ -45,7 +46,7 @@ int main(int argc, char const *argv[])
 	#pragma omp barrier
 
 	double pi = 4.0*M/N;
-	std::printf("PI is %f\n", pi);
+	std::printf("PI is %f difference: %e\n", pi, std::abs(PI-pi));
 
 	gettimeofday(&end, NULL);
 	float seconds = ((end.tv_sec  - start.tv_sec) * 1000000u + 
