@@ -11,7 +11,6 @@ inline void swap(int* values, size_t i, size_t j){
 // Use the last element as the pivot always
 size_t ip_partition(int* values, size_t start, size_t end) {
   size_t first_bigger = start;
-  int temp;
   size_t i;
   for(i = start; i < end; i++) {
     if(values[i] < values[end]){
@@ -27,7 +26,7 @@ size_t ip_partition(int* values, size_t start, size_t end) {
 
 void ip_quicksort(int* values, size_t start, size_t end) {
   size_t pivot = ip_partition(values, start, end);
-
+  
   #pragma omp sections
   {
     #pragma omp section
