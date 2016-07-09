@@ -2,6 +2,7 @@
 #include<math.h>
 #include<time.h>
 #include<stdlib.h>
+#include<omp.h>
 inline void swap(int* values, size_t i, size_t j){
   int temp = values[i];
   values[i] = values[j];
@@ -26,7 +27,12 @@ size_t ip_partition(int* values, size_t start, size_t end) {
 }
 
 void ip_quicksort(int* values, size_t start, size_t end) {
-  size_t pivot = ip_partition(values, start, end);
+  size_t pivot;
+  #pragma omp single
+  {
+    printf("Partitioning from %d to %d; TID: %d\n", start, end, omp_get_thread_num());
+    pivot = ip_partition(values, start, end);
+  }
 
   #pragma omp sections
   {
@@ -63,6 +69,10 @@ int main(int argc, char ** argv) {
   size_t i;
 
   clock_t start = clock();
+  #pragma omp parallel
+  {
+    printf("Running with %d threads\n", omp_get_num_threads());
+  }
   ip_quicksort(numbers,0,size-1);
   clock_t end = clock();
   float seconds = (float)(end - start) / CLOCKS_PER_SEC;

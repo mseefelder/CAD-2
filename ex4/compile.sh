@@ -1,2 +1,2 @@
 #!/bin/sh
-gcc quicksort.c -openmp -lm -o quicksort
+gcc quicksort.c -fopenmp -lm -o quicksort
