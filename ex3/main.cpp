@@ -7,6 +7,7 @@ tau_cxx.sh main.cpp -fopenmp -std=c++11 -o pi_tau
 
 #include <random>
 #include <cstdio>
+#include <sys/time.h>
 #include <omp.h>
 
 #ifndef SIZE
@@ -17,6 +18,9 @@ tau_cxx.sh main.cpp -fopenmp -std=c++11 -o pi_tau
 
 int main(int argc, char const *argv[])
 {
+	struct timeval start, end;
+	gettimeofday(&start, NULL);
+
 	double M, N;
 	#pragma omp parallel reduction(+:M,N)
 	{
@@ -38,9 +42,15 @@ int main(int argc, char const *argv[])
 	    }
 
 	}
+	#pragma omp barrier
 
 	double pi = 4.0*M/N;
 	std::printf("PI is %f\n", pi);
+
+	gettimeofday(&end, NULL);
+	float seconds = ((end.tv_sec  - start.tv_sec) * 1000000u + 
+		end.tv_usec - start.tv_usec) / 1.e6;
+	printf("Found PI in %f seconds.\n", seconds);
 
 	return 0;
 }
