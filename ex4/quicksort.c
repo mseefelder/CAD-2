@@ -1,8 +1,10 @@
-#include<stdio.h>
-#include<math.h>
-#include<time.h>
-#include<stdlib.h>
-#include<omp.h>
+#include <stdio.h>
+#include <math.h>
+#include <sys/time.h>
+//#include <time.h>
+#include <stdlib.h>
+#include <omp.h>
+
 inline void swap(int* values, size_t i, size_t j){
   int temp = values[i];
   values[i] = values[j];
@@ -71,10 +73,17 @@ int main(int argc, char ** argv) {
   int* numbers = generate_numbers(size);
   size_t i;
 
-  clock_t start = clock();
+  struct timeval start, end;
+  gettimeofday(&start, NULL);
+  //clock_t start = clock();
+  
   ip_quicksort(numbers,0,size-1);
-  clock_t end = clock();
-  float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+  
+  gettimeofday(&end, NULL);
+  float seconds = ((end.tv_sec  - start.tv_sec) * 1000000u + 
+         end.tv_usec - start.tv_usec) / 1.e6;
+  //clock_t end = clock();
+  //float seconds = (float)(end - start) / CLOCKS_PER_SEC;
 
   printf("Sorted in %f seconds.\n", seconds);
   free(numbers);
