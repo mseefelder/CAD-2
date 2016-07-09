@@ -5,7 +5,7 @@ OMPFLAGS = -fopenmp
 
 all: sections serial tasks
 
-%.o: %.c
+%.o: %.c quicksort_common.c
 	$(CC) $(CFLAGS) $(OMPFLAGS) -c $< -o $@
 
 sections: main.o quicksort_sections.o
