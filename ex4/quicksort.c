@@ -12,8 +12,8 @@ inline void swap(int* values, size_t i, size_t j){
 // Use the last element as the pivot always
 size_t ip_partition(int* values, size_t start, size_t end) {
   size_t first_bigger = start;
-  int temp;
   size_t i;
+
   for(i = start; i < end; i++) {
     if(values[i] < values[end]){
       swap(values, i, first_bigger);
@@ -28,22 +28,21 @@ size_t ip_partition(int* values, size_t start, size_t end) {
 
 void ip_quicksort(int* values, size_t start, size_t end) {
   size_t pivot;
-  #pragma omp single
-  {
-    printf("Partitioning from %d to %d; TID: %d\n", start, end, omp_get_thread_num());
-    pivot = ip_partition(values, start, end);
-  }
+  pivot = ip_partition(values, start, end);
 
-  #pragma omp sections
+  #pragma omp parallel
   {
-    #pragma omp section
-    if(pivot > start + 1){
-      ip_quicksort(values, start, pivot-1);
-    }
+    #pragma omp sections
+    {
+      #pragma omp section
+      if(pivot > start + 1){
+        ip_quicksort(values, start, pivot-1);
+      }
 
-    #pragma omp section
-    if(pivot < end-1){
-      ip_quicksort(values, pivot+1, end);
+      #pragma omp section
+      if(pivot < end-1){
+        ip_quicksort(values, pivot+1, end);
+      }
     }
   }
 }
@@ -63,19 +62,20 @@ int* generate_numbers(size_t size) {
 }
 
 int main(int argc, char ** argv) {
+  if(argc != 2){
+    printf("Usage: ./quicksort k");
+    exit(1);
+  }
   int k = atoi(argv[1]);
   size_t size = (size_t) pow(2, (double) k);
   int* numbers = generate_numbers(size);
   size_t i;
 
   clock_t start = clock();
-  #pragma omp parallel
-  {
-    printf("Running with %d threads\n", omp_get_num_threads());
-  }
   ip_quicksort(numbers,0,size-1);
   clock_t end = clock();
   float seconds = (float)(end - start) / CLOCKS_PER_SEC;
 
   printf("Sorted in %f seconds.\n", seconds);
+  free(numbers);
 }
