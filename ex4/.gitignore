@@ -1,2 +1,4 @@
-quicksort
-serial_quicksort
+serial
+sections
+tasks
+*.o

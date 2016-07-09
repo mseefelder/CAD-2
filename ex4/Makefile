@@ -1,7 +1,18 @@
-all: quicksort serial_quicksort
+CC = gcc
+CFLAGS = -Wall -O2
+LFLAGS = -lm
+OMPFLAGS = -fopenmp
 
-quicksort: quicksort.c
-	gcc quicksort.c -fopenmp -lm -o quicksort
+all: sections serial tasks
 
-serial_quicksort: quicksort.c
-	gcc quicksort.c -lm -o serial_quicksort
+%.o: %.c
+	$(CC) $(CFLAGS) $(OMPFLAGS) -c $< -o $@
+
+sections: main.o quicksort_sections.o
+	$(CC) $(CFLAGS) $(OMPFLAGS) $^ -o $@ $(LFLAGS)
+
+tasks: main.o quicksort_tasks.o
+	$(CC) $(CFLAGS) $(OMPFLAGS) $^ -o $@ $(LFLAGS)
+
+serial: main.c quicksort_sections.c
+	$(CC) -O2 $^ -o $@ $(LFLAGS)
