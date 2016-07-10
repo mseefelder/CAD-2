@@ -14,15 +14,19 @@ Memória: 7,7 GiB
 
 O código foi compilado com `tau_cc.sh openmp -O -DSTREAM_ARRAY_SIZE=2988441 stream.c -o stream`.
 
-## Gráfico:
+## Gráficos e análise:
 
 Os gráficos a seguir foram gerados utilizando a aplicação *paraprof*:
 
-![Gráfico de barras do tempo consumido por linha de código para cada thread.](images/stream-3.jpg)
-![Gráfico de barras do tempo consumido por linha de código para cada thread.](images/stream-4.jpg)
+![](images/stream-3.jpg)\
 
-## Análise
+*Gráfico de barras do tempo consumido por linha de código para cada thread.*
 
+![](images/stream-4.jpg)\
+
+*Gráfico de barras do tempo consumido por linha de código para cada thread.*
+
+Pode-se perceber que a carga é balanceada, pois os tempos consumidos por instrução em cada *thread* são próximos para a maioria das instruções. Algumas pequenas excessões podem ser percebidas, as quais são compensadas com tempo de espera nas barreiras de sincronização.
 
 
 # Exercício 2
@@ -88,7 +92,9 @@ No fim, a compilação, usando `Makefile.tau-papi-pdt-openmp-opari`, foi feita c
 
 ## Resultados:
 
-Para a execução e posterior análise, utilizamos o comando `export TAU_METRICS=GET_TIME_OF_DAY\:PAPI_FP_INS` para definir os eventos capturados. A seguir, apresentamos os resultados para o código em diferentes tipos de configuração.
+Para a execução e posterior análise, utilizamos o comando `export TAU_METRICS=GET_TIME_OF_DAY\:PAPI_FP_INS` para definir os eventos capturados. Capturamos *PAPI_FP_INS* no caso de querermos analisar a medida de *flops* nas *threads*, mas acabamos não utilizando os valores obtdos. 
+
+A seguir, apresentamos os resultados para o código em diferentes tipos de configuração.
 
 Testamos com e sem `collapse()` no conjunto de *loops* que representava o maior tempo de processamento, na função `iso_3dfd_it`. Não fizemos uma versão com sincronização explícita, pois utilizamos apenas o `#pragma omp parallel for` e não consideramos que fosse aplicável no caso.
 
@@ -112,17 +118,81 @@ Testamos com e sem `collapse()` no conjunto de *loops* que representava o maior 
 
 O melhor tempo de execução foi obtido **colapsando os 3 *loops* em 1** e utilizando **escalonamento guiado**.
 
-![Distribuição de carga com `collapse()` e `schedule(guided)`, gráfico do tempo de execução para as instruções](images/col-gui.jpg)
+![](images/col-gui.jpg)\
+
+*Distribuição de carga com `collapse()` e `schedule(guided)`, gráfico do tempo de execução para as instruções*
 
 Pode-se perceber que a carga está muito balanceada entre as *threads*, sendo as duas únicas rotinas que aparecem destacadas no gráfico o *loop* colapsado na função `iso_3dfd_it` (em vermelho) e a barreira implícita do loop (em azul).
 
-Executamos esse melhor caso com 1,2,3,..,8 *threads* (limite de *cores* do ambiente comptacional), medimos o tempo com a rotina *time* do *Linux* e apresentamos a seguir o gráfico de *speedup*.
+Executamos esse melhor caso com 1,2,3,..,8 *threads* (limite de *cores* do ambiente comptacional), medimos o tempo com a rotina *time* do *Linux* e apresentamos a seguir o gráfico de *speedup* em realção ao tempo de execução sequencial que foi de *8 minutos 4 segundos e 60 milésimos de segundo*:
 
-![*Speedup* da wave propagation](images/speedup-wave.png)
+![](images/real-speedup-wave.png)\
+
+*Gráfico: Tempos da wave propagation*
+
+Podemos então verificar que a partir de 4 *threads* a solução paralela supera a sequencial.
+
+![](images/times-wave.png)\
+
+*Gráfico: Speedup da wave propagation*
+
+Podemos verificar que há um ganho de velocidade com o aumento do número de *threads*, comprovando o *escalonamento forte*
 
 # Exercício 3
 
+## Código:
 
+Implementamos o cálculo de pi com a linguagem de programação C++ no padrão C++11. A seguir apresentamos o código principal no cálculo de pi:
+
+```cpp
+double calculatePI () {
+	double M, N;
+	#pragma omp parallel reduction(+:M,N)
+	{
+		double x, y, length;
+		int tn = omp_get_thread_num();
+		M = 0.0; N = 0.0;
+		std::random_device rd;
+	    std::mt19937 gen(rd());
+	    std::uniform_real_distribution<> dis(-0.5, 0.5);
+
+	    for (int i = 0; i < SIZE; ++i)
+	    {
+	    	x = dis(gen);
+	    	y = dis(gen);
+
+	    	length = x*x + y*y;
+	    	N++;
+	    	M = (length <= 0.25) ? M+1.0 : M;
+	    }
+
+	}
+	#pragma omp barrier
+
+	double pi = 4.0*M/N;
+	return pi;
+}
+``` 
+
+O código pode ser lido na íntegra em anexo, no diretório *ex3/*.
+
+## Testes:
+
+Testamos para `#define SIZE 500`, ou seja, **500 amostras por *thread*** para **1 a 10 *threads***. Para cada um dos valores de número de *threads*, executamos a função `calculatePI()` **$10^4$ vezes**, armazenando a média da diferença do valor obtido para pi e a variância dessa diferença.
+
+## Resultados e análise:
+
+![](images/pi-10k-500.png)\
+
+*Gráfico: Diferença em relação a pi x número de threads, desvio padrão apresentado como erro*
+
+![](images/pi-load-500-10kk.jpg)\
+
+*Balanceamento de carga para 8 threads e $10^6$ amostras por thread e apenas uma chamada de `calculatePI()`*
+
+Podemos observar no gráfico que relaciona a diferença do resultado obtido em relação a pi e o número de *threads* que o aumento do número de *threads* diminui a diferença e o desvio padrão, comprovando o *escalonamento fraco* da solução.
+
+Cabe ressaltar que a aplicação apresenta-se consideravelmente balanceada, como pode ser vista no gráfico 3D exposto acima. As barras mais altas são relativas ao for na região paralela do `calculatePI()` e as barras mais baixas são a espera no `#pragma omp barrier`.
 
 # Exercício 4
 
