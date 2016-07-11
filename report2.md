@@ -128,13 +128,13 @@ Executamos esse melhor caso com 1,2,3,..,8 *threads* (limite de *cores* do ambie
 
 ![](images/real-speedup-wave.png)\
 
-*Gráfico: Tempos da wave propagation*
+*Gráfico: Speedup da wave propagation*
 
 Podemos então verificar que a partir de 4 *threads* a solução paralela supera a sequencial.
 
 ![](images/times-wave.png)\
 
-*Gráfico: Speedup da wave propagation*
+*Gráfico: Tempos da wave propagation*
 
 Podemos verificar que há um ganho de velocidade com o aumento do número de *threads*, comprovando o *escalonamento forte*
 
@@ -198,11 +198,11 @@ Cabe ressaltar que a aplicação apresenta-se consideravelmente balanceada, como
 
 Para o problema de paralelização do quicksort implementamos uma versão utilizando *sections* do OpenMP e ao verificar que não conseguimos ganho de desempenho, implementamos com *tasks*, também sem ganho de desempenho. Decidimos então limitar a profundidade da recursão para diminuir o *overhead* de administração das *threads*. Também não conseguimos ganho de performance. Apresentamos a seguir os resultados dos testes e uma análise dos mesmos.
 
-O código está em anexo, no diretório *ex4/*
+O código está em anexo, no diretório *ex4/*.
 
 ## Testes, resultados e análise
 
-Os resultados a seguir foram obtidos para o código limitando a profundidade da recursão a 3 tanto no caso de *sections* quanto no caso de *tasks*.
+Os resultados a seguir foram obtidos para o código limitando a profundidade da recursão a 3 tanto no caso de *sections* quanto no caso de *tasks*. Nós habilitamos `OMP_NESTED` e configuramos `OMP_NUM_THREADS` e `OMP_THREAD_LIMIT` antes de cada teste.
 
 ![](images/quicksort-deep3.png)\
 
