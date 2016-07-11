@@ -1,0 +1,46 @@
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./serial 20 100
+Sorted 100 times in 8.774464 seconds.
+Mean: 0.087745
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./serial 21 100
+Sorted 100 times in 18.414440 seconds.
+Mean: 0.184144
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ export OMP_NUM_THREADS=2; export OMP_THREAD_LIMIT=2; export OMP_NESTED=TRUE
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./sections 20 100
+Sorted 100 times in 10.150037 seconds.
+Mean: 0.101500
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./sections 21 100
+Sorted 100 times in 19.209349 seconds.
+Mean: 0.192093
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./tasks 20 100
+Sorted 100 times in 9.984041 seconds.
+Mean: 0.099840
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./tasks 21 100
+Sorted 100 times in 19.856041 seconds.
+Mean: 0.198560
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ export OMP_NUM_THREADS=4; export OMP_THREAD_LIMIT=4; export OMP_NESTED=TRUE
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./sections 20 100
+Sorted 100 times in 10.018677 seconds.
+Mean: 0.100187
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./sections 21 100
+Sorted 100 times in 20.163750 seconds.
+Mean: 0.201637
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./tasks 20 100
+Sorted 100 times in 12.199520 seconds.
+Mean: 0.121995
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./tasks 21 100
+Sorted 100 times in 22.595032 seconds.
+Mean: 0.225950
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ export OMP_NUM_THREADS=8; export OMP_THREAD_LIMIT=8; export OMP_NESTED=TRUE
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./sections 20 100
+Sorted 100 times in 12.371508 seconds.
+Mean: 0.123715
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./sections 21 100
+Sorted 100 times in 23.327175 seconds.
+Mean: 0.233272
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./tasks 20 100
+Sorted 100 times in 13.958346 seconds.
+Mean: 0.139583
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ ./tasks 21 100
+Sorted 100 times in 25.493074 seconds.
+Mean: 0.254931
+mseefelder@mseefelder-K45VM:~/workspace/CAD-ECI/CAD-2/ex4$ 

@@ -196,3 +196,15 @@ Cabe ressaltar que a aplicação apresenta-se consideravelmente balanceada, como
 
 # Exercício 4
 
+Para o problema de paralelização do quicksort implementamos uma versão utilizando *sections* do OpenMP e ao verificar que não conseguimos ganho de desempenho, implementamos com *tasks*, também sem ganho de desempenho. Decidimos então limitar a profundidade da recursão para diminuir o *overhead* de administração das *threads*. Também não conseguimos ganho de performance. Apresentamos a seguir os resultados dos testes e uma análise dos mesmos.
+
+O código está em anexo, no diretório *ex4/*
+
+## Testes, resultados e análise
+
+Os resultados a seguir foram obtidos para o código limitando a profundidade da recursão a 3 tanto no caso de *sections* quanto no caso de *tasks*.
+
+![](images/quicksort-deep3.png)\
+
+*Gráfico: Velocidade das implementações paralelas em relação ao código sequencial*
+

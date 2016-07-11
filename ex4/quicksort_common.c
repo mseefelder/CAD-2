@@ -1,5 +1,5 @@
 #ifndef MAX_DEEP
-#define MAX_DEEP 15
+  #define MAX_DEEP 3
 #endif
 
 inline void swap(int* values, size_t i, size_t j){

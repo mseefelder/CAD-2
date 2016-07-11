@@ -27,7 +27,7 @@ float bench(size_t size){
   float seconds = (float)(end - start) / CLOCKS_PER_SEC;
 
   size_t i;
-  printf("Checking...\n");
+  //printf("Checking...\n");
 
   for(i = 1; i < size; i++){
     if(numbers[i] < numbers[i-1]){
@@ -35,7 +35,7 @@ float bench(size_t size){
       break;
     }
     if(i == size-1){
-      printf("Valid ordering\n");
+      //printf("Valid ordering\n");
     }
   }
 
@@ -57,6 +57,6 @@ int main(int argc, char ** argv) {
     seconds += bench(size);
   }
 
-  printf("Sorted %d times in %f seconds.\nMean: %f", times, seconds, seconds/times);
+  printf("Sorted %d times in %f seconds.\nMean: %f\n", times, seconds, seconds/times);
   return 0;
 }
