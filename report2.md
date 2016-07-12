@@ -208,3 +208,4 @@ Os resultados a seguir foram obtidos para o código limitando a profundidade da 
 
 *Gráfico: Velocidade das implementações paralelas em relação ao código sequencial*
 
+O que deve estar acontecendo com o Quicksort é a invalidação de cache. Ao subdividir em tarefas muito pequenas, uma tarefa pode mecher numa área que está dentro do cache de outra tarefa, e se elas acontecerem em cores diferentes, isso irá acarretar em muita invalidação de cache, forçando a CPU a refazer todas as operações. Além disso, mesmo limitando a profundidade, é possível que o trabalho nos cores seja desbalanceado e que também o *overhead* para o spawn de threads seja muito grande, por precisar fazer chamadas de sistema.
